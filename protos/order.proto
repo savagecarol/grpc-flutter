@@ -1,0 +1,45 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.example.grpc.dto";
+
+
+service OrderService{
+
+  // crud operations
+  rpc getOrders(GetOrderRequest) returns (Order);
+  rpc createOrders(CreateOrderRequest) returns (Order);
+  rpc getAllOrders(Empty) returns (Orders);
+
+
+  // streaming
+  rpc serverSideStreaming(Empty) returns (stream Order); // empty request from the client and we are providing stream by server
+  rpc clientSideStreaming(stream Order) returns (Empty); // stream orders we are getting from client
+  rpc biDirectionalStreaming(stream CreateOrderRequest) returns (stream Order);
+
+
+}
+
+message Empty{}
+
+message CreateOrderRequest{
+    string name = 1;
+    string brand = 2;
+    string price = 3;
+
+}
+
+message GetOrderRequest{
+  string id = 1;
+}
+
+message Orders {
+    repeated Order orders = 1;
+}
+
+message Order {
+  string id = 1;
+  string name = 2;
+  string brand = 3;
+  string price = 4;
+}
